@@ -1,4 +1,4 @@
-package com.pokemonreview.api.execeptions;
+package com.pokemonreview.api.exceptions;
 
 public abstract class MyResourceException extends RuntimeException{
     public MyResourceException(String message) {

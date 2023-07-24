@@ -1,4 +1,4 @@
-package com.pokemonreview.api.execeptions;
+package com.pokemonreview.api.exceptions;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,7 +14,7 @@ import java.util.Map;
 @Slf4j
 public class GlobalExceptionHandler {
     @ExceptionHandler(MyResourceException.class)
-    public ResponseEntity<ErrorObject> handleResourceNotFoundException(MyResourceException ex) {
+    public ResponseEntity<com.pokemonreview.api.exceptions.ErrorObject> handleResourceNotFoundException(MyResourceException ex) {
         ErrorObject errorObject = new ErrorObject();
         errorObject.setStatusCode(ex.getStatusCode());
         errorObject.setMessage(ex.getMessage());
@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
         String msg = "예상치 못한 문제가 발생했습니다.\n관리자에게 연락 하시기 바랍니다.";
         result.put("message", msg);
         result.put("httpStatus", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        ret = new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);git
+        ret = new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         e.printStackTrace();
 
         log.error(e.getMessage(), e);
