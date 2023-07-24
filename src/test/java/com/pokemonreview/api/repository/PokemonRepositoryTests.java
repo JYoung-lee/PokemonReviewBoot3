@@ -2,7 +2,6 @@ package com.pokemonreview.api.repository;
 
 import com.pokemonreview.api.models.Pokemon;
 import com.pokemonreview.api.models.PokemonType;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +10,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.Optional;
 
 
 @DataJpaTest
@@ -86,5 +84,38 @@ class PokemonRepositoryTests {
         Assertions.assertThat(existPokemon).isNotNull();
     }
 
+    @Test
+    public void PokemonRepository_UpdatePokemon_ReturnPokemonNotNull() {
+        Pokemon pokemon = Pokemon.builder()
+                .name("pikachu")
+                .type(PokemonType.ELECTRIC)
+                .build();
 
+        pokemonRepository.save(pokemon);
+
+        Pokemon pokemonSave = pokemonRepository.findById(pokemon.getId()).get();
+        pokemonSave.setName("Raichu");
+        pokemonSave.setType(PokemonType.NORMAL);
+
+        Assertions.assertThat(pokemonSave.getName()).isEqualTo("Raichu");
+        Assertions.assertThat(pokemonSave.getType()).isEqualTo(PokemonType.NORMAL);
+
+        System.out.println("pokemonSave = " + pokemonSave);
+    }
+
+
+    @Test
+    public void PokemonRepository_PokemonDelete_ReturnPokemonIsEmpty() {
+        Pokemon pokemon = Pokemon.builder()
+                .name("pikachu")
+                .type(PokemonType.ELECTRIC)
+                .build();
+
+        pokemonRepository.save(pokemon);
+
+        pokemonRepository.deleteById(pokemon.getId());
+        Optional<Pokemon> pokemonReturn = pokemonRepository.findById(pokemon.getId());
+
+        Assertions.assertThat(pokemonReturn).isEmpty();
+    }
 }
