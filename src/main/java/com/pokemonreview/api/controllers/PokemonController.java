@@ -1,4 +1,4 @@
-package com.pokemonreview.api.controller;
+package com.pokemonreview.api.controllers;
 
 import com.pokemonreview.api.dto.PageResponse;
 import com.pokemonreview.api.dto.PokemonDto;
@@ -25,12 +25,12 @@ public class PokemonController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PokemonDto> pokemonDetail(@PathVariable int id) {
-        return ResponseEntity.ok(pokemonService.getPokemonById(id));
+    public ResponseEntity<PokemonDto> pokemonDetail(@PathVariable int pokemonId) {
+        return ResponseEntity.ok(pokemonService.getPokemonById(pokemonId));
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.CREATED) //201
     public ResponseEntity<PokemonDto> createPokemon(@RequestBody PokemonDto pokemonDto) {
         return new ResponseEntity<>(pokemonService.createPokemon(pokemonDto), HttpStatus.CREATED);
     }
