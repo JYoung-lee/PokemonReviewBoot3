@@ -2,6 +2,7 @@ package com.pokemonreview.api.repository;
 
 import com.pokemonreview.api.models.Pokemon;
 import com.pokemonreview.api.models.PokemonType;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,10 +50,40 @@ class PokemonRepositoryTests {
         pokemonRepository.save(pokemon);
         pokemonRepository.save(pokemon2);
 
-        List<Pokemon> pokemonList = pokemonRepository.findAll();
+        List<Pokemon> existPokemon = pokemonRepository.findAll();
 
-        Assertions.assertThat(pokemonList).isNotNull();
-        Assertions.assertThat(pokemonList.size()).isEqualTo(2);
+        Assertions.assertThat(existPokemon).isNotNull();
+        Assertions.assertThat(existPokemon.size()).isEqualTo(2);
+    }
+
+    @Test
+    public void PokemonRepository_FindById_ReturnPokemon() {
+        Pokemon pokemon = Pokemon.builder()
+                .name("pikachu")
+                .type(PokemonType.ELECTRIC).build();
+
+        pokemonRepository.save(pokemon);
+
+        Pokemon savedPokemon = pokemonRepository
+                .findById(pokemon.getId())
+                .get();
+
+        Assertions.assertThat(savedPokemon).isNotNull();
+    }
+
+    @Test
+    public void PokemonRepository_FindByType_ReturnPokemonNotNull() {
+        Pokemon pokemon = Pokemon.builder()
+                .name("pikachu")
+                .type(PokemonType.ELECTRIC).build();
+
+        pokemonRepository.save(pokemon);
+
+        Pokemon existPokemon = pokemonRepository
+                .findByType(pokemon.getType())
+                .get();
+
+        Assertions.assertThat(existPokemon).isNotNull();
     }
 
 
