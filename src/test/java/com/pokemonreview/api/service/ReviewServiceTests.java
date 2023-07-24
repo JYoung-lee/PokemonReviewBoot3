@@ -23,7 +23,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+
 
 @ExtendWith(MockitoExtension.class)
 public class ReviewServiceTests {
@@ -76,12 +77,12 @@ public class ReviewServiceTests {
 
     @Test
     public void ReviewService_GetReviewsByPokemonId_ReturnReviewDto() {
-        int reviewId = 1;
-        when(reviewRepository.findByPokemonId(reviewId))
+        int pokemonId = 1;
+        when(reviewRepository.findByPokemonId(pokemonId))
                 .thenReturn(Arrays.asList(review));
 
         List<ReviewDto> pokemonReturn =
-                reviewService.getReviewsByPokemonId(reviewId);
+                reviewService.getReviewsByPokemonId(pokemonId);
 
         Assertions.assertThat(pokemonReturn).isNotNull();
         System.out.println("pokemonReturn = " + pokemonReturn);
@@ -98,6 +99,7 @@ public class ReviewServiceTests {
                 .thenReturn(Optional.of(pokemon));
         when(reviewRepository.findById(reviewId))
                 .thenReturn(Optional.of(review));
+
 
         ReviewDto reviewReturn =
                 reviewService.getReviewById(reviewId, pokemonId);
@@ -118,7 +120,7 @@ public class ReviewServiceTests {
                 .thenReturn(Optional.of(pokemon));
         when(reviewRepository.findById(reviewId))
                 .thenReturn(Optional.of(review));
-        when(reviewRepository.save(review))
+        lenient().when(reviewRepository.save(review))
                 .thenReturn(review);
 
         ReviewDto updateReturn =
