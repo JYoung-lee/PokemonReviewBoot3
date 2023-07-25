@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -39,16 +40,24 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDto> login(@RequestBody LoginDto loginDto){
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginDto.getUsername(),
-                        loginDto.getPassword())
+                new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword())
         );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        SecurityContextHolder.getContext().setAuthentication(authentication); //회원 정보 Set
+
+        //Token 생성
         String token = jwtGenerator.generateToken(authentication);
         AuthResponseDto authResponseDTO = new AuthResponseDto(token);
         authResponseDTO.setUsername(loginDto.getUsername());
-        UserEntity userEntity = userRepository.findByUsername(loginDto.getUsername()).get();
-        authResponseDTO.setRole(userEntity.getRoles().get(0).getName());
+        Optional<UserEntity> optionalUser = userRepository.findByUsername(loginDto.getUsername());
+        System.out.println("optionalUser : {} "+optionalUser);
+        System.out.println("optionalUser.isPresent :: {}"+optionalUser.isPresent());
+
+        if(optionalUser.isPresent()){
+            UserEntity userEntity =  optionalUser.get();
+            authResponseDTO.setRole(userEntity.getRoles().get(0).getName());
+        }
+
         return new ResponseEntity<>(authResponseDTO, HttpStatus.OK);
     }
 
