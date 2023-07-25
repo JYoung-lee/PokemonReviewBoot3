@@ -50,8 +50,6 @@ public class AuthController {
         AuthResponseDto authResponseDTO = new AuthResponseDto(token);
         authResponseDTO.setUsername(loginDto.getUsername());
         Optional<UserEntity> optionalUser = userRepository.findByUsername(loginDto.getUsername());
-        System.out.println("optionalUser : {} "+optionalUser);
-        System.out.println("optionalUser.isPresent :: {}"+optionalUser.isPresent());
 
         if(optionalUser.isPresent()){
             UserEntity userEntity =  optionalUser.get();
