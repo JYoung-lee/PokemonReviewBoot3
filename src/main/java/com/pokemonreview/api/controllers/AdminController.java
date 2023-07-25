@@ -26,12 +26,12 @@ public class AdminController {
     private final PasswordEncoder passwordEncoder;
 
     @GetMapping
-		@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public PageResponse getAllUsers(
 						@RequestParam(value = "pageNo", defaultValue = "0", required = false) 
-            int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = "2", required = false) 
-            int pageSize) {
+                        int pageNo,
+                        @RequestParam(value = "pageSize", defaultValue = "2", required = false)
+                        int pageSize) {
         System.out.println(">>> pageNo = " + pageNo);
         System.out.println("<<<< pageSize = " + pageSize);
 
@@ -61,7 +61,7 @@ public class AdminController {
     }
 
     @GetMapping("/{id}")
-		@PreAuthorize("hasAuthority('ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public UserDto getUser(@PathVariable("id") int userId) {
         UserEntity existUser = userRepository
                 .findById(userId)
