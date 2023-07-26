@@ -9,6 +9,7 @@ import com.pokemonreview.api.service.PokemonService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,13 +42,16 @@ public class PokemonServiceImpl implements PokemonService {
 
     @Override
     public PageResponse getAllPokemon(int pageNo, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Pageable pageable =
+                PageRequest.of(pageNo, pageSize,Sort.by("id").descending());
+        //PageRequest.of(pageNo, pageSize);
+
         Page<Pokemon> pokemons = pokemonRepository.findAll(pageable);
         List<Pokemon> listOfPokemon = pokemons.getContent();
         List<PokemonDto> content = listOfPokemon
                 .stream() //Stream<Pokemon>
-                .map(p -> mapToDto(p)) // Stream<PokemonDto>
-                .collect(Collectors.toList()); // List<PokemonDto>
+                .map(p -> mapToDto(p)) //Stream<PokemonDto>
+                .collect(Collectors.toList()); //List<PokemonDto>
 
         PageResponse pokemonResponse = new PageResponse();
         pokemonResponse.setContent(content);
